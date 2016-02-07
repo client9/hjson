@@ -2,6 +2,7 @@ package hjson
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"strconv"
 )
@@ -26,6 +27,11 @@ func (st *readerState) Read(p []byte) (int, error) {
 		st.br = bytes.NewReader(ToJSON(buf.Bytes()))
 	}
 	return st.br.Read(p)
+}
+
+// Unmarshal is the same as JSON.Unmarshal but for HJSON files
+func Unmarshal(data []byte, v interface{}) error {
+	return json.Unmarshal(ToJSON(data), v)
 }
 
 // ToJSON converts a hjson format to JSON
