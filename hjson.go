@@ -16,7 +16,7 @@ func New(r io.Reader) io.Reader {
 	return &readerState{source: r}
 }
 
-// Read impliments the io.Reader interface
+// Read implements the io.Reader interface
 func (st *readerState) Read(p []byte) (int, error) {
 	if st.br == nil {
 		buf := &bytes.Buffer{}

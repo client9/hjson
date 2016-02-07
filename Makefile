@@ -11,6 +11,7 @@ lint:
 
 test:
 	go test .
+	find . -name '*' -type f | xargs misspell
 
 clean:
 	rm -f *~
