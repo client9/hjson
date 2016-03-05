@@ -102,8 +102,11 @@ func ToJSON(raw []byte) []byte {
 					i += idx + 4
 				}
 			} else {
-				// ignore it
-				i++
+				// bare word
+				needComma = writeComma(out, needComma)
+				word := getWord(s[i:])
+				writeWord(out, word, !isKeyword(word))
+				i += len(word)
 			}
 		case '#':
 			// Scan to EOL

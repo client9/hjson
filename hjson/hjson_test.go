@@ -97,6 +97,12 @@ bar
 `,
 			want: `{"foo":"bar"}`,
 		},
+		{ // 18
+			orig: `
+foo: /Users/nickg
+`,
+			want: `{"foo":"/Users/nickg"}`,
+		},
 	}
 
 	for num, tt := range cases {
