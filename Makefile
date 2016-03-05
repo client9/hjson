@@ -10,7 +10,7 @@ lint:
 	find . -name '*.go' | xargs gofmt -w -s
 
 test:
-	go test .
+	go test ./...
 	find . -name '*' -type f | xargs misspell
 
 clean:
