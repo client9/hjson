@@ -86,6 +86,25 @@ func ToJSON(raw []byte) []byte {
 			needComma = true
 			out.WriteByte(']')
 			i++
+		case '/':
+			if i+1 < len(s) && s[i+1] == '/' {
+				idx := bytes.IndexByte(s[2:], '\n')
+				if idx == -1 {
+					i = len(s)
+				} else {
+					i += idx + 2
+				}
+			} else if i+1 < len(s) && s[i+1] == '*' {
+				idx := bytes.Index(s[2:], []byte("*/"))
+				if idx == -1 {
+					i = len(s)
+				} else {
+					i += idx + 4
+				}
+			} else {
+				// ignore it
+				i++
+			}
 		case '#':
 			// Scan to EOL
 			for ; i < len(s); i++ {

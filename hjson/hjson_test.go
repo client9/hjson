@@ -76,6 +76,27 @@ bar
 `,
 			want: `{"foo":"bar"}`,
 		},
+		{ // 16
+			orig: `
+// comment
+foo: """
+bar
+"""
+// another
+`,
+			want: `{"foo":"bar"}`,
+		},
+		{ // 17
+			orig: `
+/* comment
+  whatever */
+foo: """
+bar
+"""
+/* another
+`,
+			want: `{"foo":"bar"}`,
+		},
 	}
 
 	for num, tt := range cases {
