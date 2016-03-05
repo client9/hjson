@@ -64,7 +64,15 @@ func TestHJSON(t *testing.T) {
 		{ // 14
 			orig: `
 # junk
-"foo": "bar",
+foo: "bar",
+`,
+			want: `{"foo":"bar"}`,
+		},
+		{ // 15
+			orig: `
+foo: '''
+bar
+''',
 `,
 			want: `{"foo":"bar"}`,
 		},

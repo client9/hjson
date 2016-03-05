@@ -14,6 +14,7 @@ native Golang parser do the hard stuff.
  * Values do not need to be quoted
  * Commas are optional
  * Comments script-style `#`
+ * Multi-line strings
 
 ### Not-Working:
 
@@ -21,9 +22,10 @@ Mostly due to laziness
 
  * Comments double-slash  `//`
  * Comments `/* ... */`
- * Multi-line strings
 
 ### Differences and/or bugs:
 
  * Unquoted strings have trailing whitespace removed.
+ * Strings can be quoted using single quote, e.g. `'foo'`.
+ * Multi-line strings can also be started with double quote, e.g. `"""`
  * Likely to be some encoding issues, please file bugs.
