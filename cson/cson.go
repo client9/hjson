@@ -93,7 +93,6 @@ func ToJSON(raw []byte) []byte {
 		case '\'', '"':
 			needComma = writeComma(out, needComma)
 			content, offset := getString(s[i:])
-			// TODO escape
 			out.WriteByte('"')
 			out.Write(content)
 			out.WriteByte('"')
