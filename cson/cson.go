@@ -96,7 +96,7 @@ func ToJSON(raw []byte) []byte {
 			out.WriteByte('"')
 			out.Write(content)
 			out.WriteByte('"')
-			i += offset + 1
+			i += offset
 		case '+', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 			needComma = writeComma(out, needComma)
 			word := getWord(s[i:])

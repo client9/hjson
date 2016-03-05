@@ -13,7 +13,7 @@ func TestCSON(t *testing.T) {
 			orig: `
 foo:
   brother:
-    name: "max"
+    name:"max"
     age: 11
   sister:
     name: "ida"
