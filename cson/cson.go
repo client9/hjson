@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-//	"log"
+	//	"log"
 	"strconv"
 )
 
@@ -211,7 +211,7 @@ func getString(s []byte) ([]byte, int) {
 		lines := bytes.Split(content, []byte{'\n'})
 		for _, line := range lines {
 			for i := 0; i < len(line) && i < minIndent; i++ {
-				if line[i] != ' '{
+				if line[i] != ' ' {
 					minIndent = i
 					break
 				}
