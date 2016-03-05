@@ -70,6 +70,14 @@ foo: "bar"
 `,
 			want: `{"foo":"bar"}`,
 		},
+		{ // 8
+			orig: `
+foo: '''
+bar
+'''
+`,
+			want: `{"foo":"bar"}`,
+		},
 	}
 
 	for num, tt := range cases {

@@ -89,42 +89,14 @@ func ToJSON(raw []byte) []byte {
 			// if the next token is a '}' or '], then it will NOT get added (fixes ending comma problem in JSON)
 			needComma = true
 			i++
-		case '"':
+		case '\'', '"':
 			needComma = writeComma(out, needComma)
-			// scan ahead to next unescaped quote
-			j := i + 1
-			for j < len(s) {
-				if s[j] == '"' {
-					j++
-					break
-				} else if s[j] == '\\' && j+1 < len(s) {
-					j++
-				}
-				j++
-			}
-			// TODO escape
-			out.Write(s[i:j])
-			i = j
-		case '\'':
-			needComma = writeComma(out, needComma)
-			// skip over opening single quote
-			i++
-			j := i
-			for j < len(s) {
-				if s[j] == '\'' {
-					break
-				} else if s[j] == '\\' && j+1 < len(s) {
-					j++
-				}
-				j++
-			}
+			content, offset := getString(s[i:])
 			// TODO escape
 			out.WriteByte('"')
-			out.Write(s[i:j])
+			out.Write(content)
 			out.WriteByte('"')
-
-			// +1 to skip over ending single quote
-			i = j + 1
+			i += offset + 1
 		case '+', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 			needComma = writeComma(out, needComma)
 			word := getWord(s[i:])
@@ -204,6 +176,55 @@ func getComment(s []byte) []byte {
 		return s
 	}
 	return s[:idx+7]
+}
+
+func getString(s []byte) ([]byte, int) {
+	if len(s) == 0 {
+		return nil, 0
+	}
+	char := s[0]
+	if char != '\'' && char != '"' {
+		return nil, 0
+	}
+	if len(s) > 3 && s[1] == char && s[2] == char {
+		// we have multi-line
+
+		// assume not ended correctly
+		offset := len(s)
+		content := s[3:]
+
+		idx := bytes.Index(content, []byte{char, char, char})
+		if idx > -1 {
+			// with ending
+			content = content[:idx]
+			offset = idx + 7
+		}
+		// now figure out whitespace stuff
+		if len(content) > 0 && content[0] == '\n' {
+			content = content[1:]
+		}
+		if len(content) > 0 && content[len(content)-1] == '\n' {
+			content = content[:len(content)-1]
+		}
+		content = bytes.Replace(content, []byte{'\n'}, []byte{'\\', 'n'}, -1)
+		return content, offset
+	}
+
+	// single line string
+	j := 1
+	for j < len(s) {
+		if s[j] == char {
+			break
+		} else if s[j] == '\\' && j+1 < len(s) {
+			j++
+		}
+		j++
+	}
+
+	// not sure if other things need replacing or not
+	content := s[1:j]
+	content = bytes.Replace(content, []byte{'\n'}, []byte{'\\', 'n'}, -1)
+	return content, j + 1
 }
 
 func getWord(s []byte) []byte {
