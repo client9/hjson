@@ -13,12 +13,12 @@ native Golang parser do the hard stuff.
  * Keys do not need to be quoted
  * Values do not need to be quoted
  * Commas are optional
+ * Comments script-style `#`
 
 ### Not-Working:
 
 Mostly due to laziness
 
- * Comments script-style  `#`
  * Comments double-slash  `//`
  * Comments `/* ... */`
  * Multi-line strings
@@ -26,4 +26,4 @@ Mostly due to laziness
 ### Differences and/or bugs:
 
  * Unquoted strings have trailing whitespace removed.
- * Likely to be some encoding issues
+ * Likely to be some encoding issues, please file bugs.

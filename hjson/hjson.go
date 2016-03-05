@@ -86,6 +86,13 @@ func ToJSON(raw []byte) []byte {
 			needComma = true
 			out.WriteByte(']')
 			i++
+		case '#':
+			// Scan to EOL
+			for ; i < len(s); i++ {
+				if s[i] == '\n' {
+					break
+				}
+			}
 		case ',':
 			// we pretend we didn't see this and let the auto-comma code add it if necessary
 			// if the next token is value, it will get added
