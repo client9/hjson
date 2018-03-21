@@ -1,31 +1,33 @@
 
-all: install lint test
+build: hooks  ## build, install, lint, test
+	./scripts/build.sh
 
-install:
-	go install ./...
+test: build
 
-lint:
-	golint ./...
-	go vet ./...
-	find . -name '*.go' | xargs gofmt -w -s
+cov:
+	go test -coverprofile=coverage.out 
+	go tool cover -html=coverage.out
 
-test:
-	go test ./...
-	find . -name '*' -type f | xargs misspell
-
-clean:
-	rm -f *~
+clean:  ## clean up time
+	rm -rf dist/ bin/
 	go clean ./...
-	git gc
+	git gc --aggressive
 
-ci: install lint test
+.PHONY: help ci bench
 
-docker-ci:
-	docker run --rm \
-		-e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN \
-		-v $(PWD):/go/src/github.com/client9/hjson \
-		-w /go/src/github.com/client9/hjson \
-		nickg/golang-dev-docker \
-		make ci
+# https://www.client9.com/automatically-install-git-hooks/
+.git/hooks/pre-commit: scripts/pre-commit.sh
+	cp -f scripts/pre-commit.sh .git/hooks/pre-commit
+.git/hooks/commit-msg: scripts/commit-msg.sh
+	cp -f scripts/commit-msg.sh .git/hooks/commit-msg
+hooks: .git/hooks/pre-commit .git/hooks/commit-msg  ## install git precommit hooks
 
-.PHONY: ci docker-ci
+
+# https://www.client9.com/self-documenting-makefiles/
+help:
+	@awk -F ':|##' '/^[^\t].+?:.*?##/ {\
+	printf "\033[36m%-30s\033[0m %s\n", $$1, $$NF \
+	}' $(MAKEFILE_LIST)
+.DEFAULT_GOAL=help
+.PHONY=help
+

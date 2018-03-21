@@ -3,9 +3,10 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"github.com/client9/xson/hjson"
 	"log"
 	"os"
+
+	"github.com/client9/xson/hjson"
 )
 
 func main() {
@@ -27,7 +28,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Unable to decode HJSON: %s", err)
 		}
-		rawout := []byte{}
+		var rawout []byte
 		if *compact {
 			rawout, err = json.Marshal(v)
 		} else {

@@ -1,6 +1,12 @@
-sudo: required
+sudo: false
 dist: trusty
-language: generic
+language: go
+go:
+  - "1.10"
+git:
+  depth: 1
 script:
-  - make -e docker-ci
-
+  - ./scripts/setup.sh
+  - ./scripts/build.sh
+after_success:
+  - test -n "$TRAVIS_TAG" && ./scripts/goreleaser.sh
