@@ -88,6 +88,26 @@ foo: '''
 `,
 			want: `{"foo":"1\n2\n 3"}`,
 		},
+		{
+			orig: `
+foo: '''
+  bar "buzz"	'spam'
+  abc = {"ham": [
+    "egg",
+    "shell"
+  ]}
+'''
+qwerty:
+  asdf: 123
+`,
+			want: `{"foo":"bar \"buzz\"\t'spam'\nabc = {\"ham\": [\n  \"egg\",\n  \"shell\"\n]}","qwerty":{"asdf":123}}`,
+		},
+		{
+			orig: `
+foo: "Hello, 世界"
+`,
+			want: `{"foo":"Hello, 世界"}`,
+		},
 	}
 
 	for num, tt := range cases {
